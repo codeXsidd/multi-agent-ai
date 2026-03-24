@@ -1,5 +1,8 @@
 # Multi AI Agent Platform
 
+![License](https://img.shields.io/github/license/codeXsidd/multi-agent-ai)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+
 An open-source (MIT Licensed) platform where multiple AI agents collaborate to solve complex, delegatable tasks. Built with a FastAPI backend and a modern React (Vite) frontend.
 
 ## Features
@@ -82,5 +85,11 @@ The backend exposes comprehensive REST APIs for custom clients:
 - `POST /api/tasks` - Delegate a task.
 - `GET /api/system/events` - Get the message broker's history.
 
+## Contributing
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**. Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Code of Conduct
+We are committed to fostering a welcoming and inspiring community for all. Please read our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for more details.
+
 ## License
-MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
