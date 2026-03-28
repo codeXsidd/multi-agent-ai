@@ -1,0 +1,43 @@
+name: Open Source Automation Agent
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  triage_agent:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Greet New Issue Contributors
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🤖 **Hello there!** Thank you for opening this issue and contributing to our open-source project! \n\nOur AI triage agent and maintainers will look into it shortly. In the meantime, please make sure you have provided all necessary details according to our templates. Happy coding! 🚀'
+            })
+      
+      - name: Agentic Auto-Labeling
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const title = context.payload.issue.title.toLowerCase();
+            const body = context.payload.issue.body ? context.payload.issue.body.toLowerCase() : '';
+            const labels = [];
+            
+            if (title.includes('bug') || body.includes('bug')) labels.push('bug');
+            if (title.includes('feat') || body.includes('feat') || title.includes('add') || body.includes('add')) labels.push('enhancement');
+            if (title.includes('doc') || body.includes('doc')) labels.push('documentation');
+            
+            if (labels.length > 0) {
+              github.rest.issues.addLabels({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: labels
+              });
+            }
