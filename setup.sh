@@ -9,12 +9,14 @@ cd src/backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-
-# Start backend in background
-echo "Starting FastAPI Server on port 8000..."
-uvicorn main:app --reload &
-BACKEND_PID=$!
 cd ../..
+
+# Start backend in background (run from src/ so "backend" package is importable)
+echo "Starting FastAPI Server on port 8000..."
+cd src
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload &
+BACKEND_PID=$!
+cd ..
 
 echo "=================================="
 echo "Installing frontend dependencies..."

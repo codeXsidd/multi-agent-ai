@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 from backend.core.manager import manager
 from backend.core.agent import BaseAgent
 from backend.core.communication import broker
@@ -16,12 +16,12 @@ class AgentCreateRequest(BaseModel):
     role: str
     system_prompt: str
 
-@api_router.get("/agents", response_model=List[Dict])
+@api_router.get("/agents", response_model=List[Dict[str, Any]])
 async def get_agents():
     """List all registered agents."""
     return manager.get_agents()
 
-@api_router.post("/agents", response_model=Dict)
+@api_router.post("/agents", response_model=Dict[str, Any])
 async def create_agent(request: AgentCreateRequest):
     """Register a new agent dynamically."""
     new_agent = BaseAgent(
@@ -36,17 +36,17 @@ async def create_agent(request: AgentCreateRequest):
 async def get_agent_memory(agent_id: str):
     """Retrieve full conversational history for an agent."""
     memory = manager.get_agent_memory(agent_id)
-    if memory is None:
+    if not memory:
         raise HTTPException(status_code=404, detail="Agent not found")
     return {"agent_id": agent_id, "memory": memory}
 
-@api_router.post("/tasks", response_model=Dict)
+@api_router.post("/tasks", response_model=Dict[str, Any])
 async def create_task(request: TaskRequest):
     """Formally delegate a new task to the system or specific agent."""
     task_id = await manager.delegate_task(request.description, request.agent_id)
     return {"task_id": task_id, "message": "Task delegated"}
 
-@api_router.get("/tasks", response_model=List[Dict])
+@api_router.get("/tasks", response_model=List[Dict[str, Any]])
 async def get_tasks():
     """View all task statuses and results."""
     return manager.get_tasks()

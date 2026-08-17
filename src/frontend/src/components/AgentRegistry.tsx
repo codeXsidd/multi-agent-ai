@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { type Agent, createAgent } from '../api/client';
+import type { Agent } from '../api/client.ts';
+import { createAgent } from '../api/client.ts';
 import { UserPlus, Bot } from 'lucide-react';
 
 interface Props {
@@ -22,7 +23,7 @@ export default function AgentRegistry({ agents, onRefresh }: Props) {
       setRole('');
       setSystemPrompt('');
       onRefresh();
-    } catch (e) {
+    } catch {
       alert("Error creating agent");
     } finally {
       setIsSubmitting(false);

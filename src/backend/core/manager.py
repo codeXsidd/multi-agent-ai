@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 from backend.core.agent import BaseAgent
 from backend.core.communication import broker, Message
 import uuid
@@ -6,13 +6,13 @@ import uuid
 class TaskManager:
     def __init__(self):
         self.agents: Dict[str, BaseAgent] = {}
-        self.tasks: Dict[str, Dict] = {}
+        self.tasks: Dict[str, Dict[str, Any]] = {}
 
-    def register_agent(self, agent: BaseAgent):
+    def register_agent(self, agent: BaseAgent) -> str:
         self.agents[agent.id] = agent
         return agent.id
 
-    def get_agents(self) -> List[Dict]:
+    def get_agents(self) -> List[Dict[str, Any]]:
         return [agent.to_dict() for agent in self.agents.values()]
 
     async def delegate_task(self, task_description: str, agent_id: Optional[str] = None) -> str:
@@ -55,10 +55,10 @@ class TaskManager:
             
         return task_id
         
-    def get_tasks(self) -> List[Dict]:
+    def get_tasks(self) -> List[Dict[str, Any]]:
         return list(self.tasks.values())
         
-    def get_agent_memory(self, agent_id: str):
+    def get_agent_memory(self, agent_id: str) -> List[Dict[str, Any]]:
         if agent_id in self.agents:
             return self.agents[agent_id].memory.get_all()
         return []

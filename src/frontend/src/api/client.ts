@@ -23,13 +23,23 @@ export interface SystemEvent {
   timestamp: string;
 }
 
+export interface CreateAgentResponse {
+  id: string;
+  message: string;
+}
+
+export interface CreateTaskResponse {
+  task_id: string;
+  message: string;
+}
+
 export const fetchAgents = async (): Promise<Agent[]> => {
   const res = await fetch(`${API_BASE}/agents`);
   if (!res.ok) throw new Error("Failed to fetch agents");
   return res.json();
 };
 
-export const createAgent = async (name: string, role: string, systemPrompt: string): Promise<any> => {
+export const createAgent = async (name: string, role: string, systemPrompt: string): Promise<CreateAgentResponse> => {
   const res = await fetch(`${API_BASE}/agents`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -45,7 +55,7 @@ export const fetchTasks = async (): Promise<Task[]> => {
   return res.json();
 };
 
-export const createTask = async (description: string, agentId?: string): Promise<any> => {
+export const createTask = async (description: string, agentId?: string): Promise<CreateTaskResponse> => {
   const res = await fetch(`${API_BASE}/tasks`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

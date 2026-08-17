@@ -1,4 +1,4 @@
-import type { SystemEvent } from '../api/client';
+import type { SystemEvent } from '../api/client.ts';
 import { MessageSquare, Server, ArrowRight } from 'lucide-react';
 
 interface Props {

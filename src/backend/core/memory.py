@@ -10,7 +10,7 @@ class MemoryItem:
         self.timestamp = datetime.utcnow()
         self.metadata = metadata or {}
         
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "id": self.id,
             "role": self.role,
@@ -23,10 +23,10 @@ class BaseMemory:
     def add_message(self, role: str, content: str, metadata: Optional[Dict[str, Any]] = None) -> MemoryItem:
         raise NotImplementedError
 
-    def get_context(self, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_context(self, limit: int = 10) -> List[Dict[str, str]]:
         raise NotImplementedError
         
-    def clear(self):
+    def clear(self) -> None:
         raise NotImplementedError
 
 class SimpleMemory(BaseMemory):
@@ -39,12 +39,12 @@ class SimpleMemory(BaseMemory):
         self.messages.append(item)
         return item
 
-    def get_context(self, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_context(self, limit: int = 10) -> List[Dict[str, str]]:
         # Return last N messages formatted for LLM
         return [{"role": msg.role, "content": msg.content} for msg in self.messages[-limit:]]
     
-    def get_all(self):
+    def get_all(self) -> List[Dict[str, Any]]:
         return [msg.to_dict() for msg in self.messages]
     
-    def clear(self):
+    def clear(self) -> None:
         self.messages = []
