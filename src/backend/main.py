@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from backend.api.router import api_router
 from backend.core.manager import manager
 from backend.core.agent import BaseAgent
+from typing import Dict
 
 # Load environment variables (e.g., OPENAI_API_KEY)
 load_dotenv()
@@ -27,7 +28,7 @@ app.add_middleware(
 app.include_router(api_router, prefix="/api")
 
 @app.on_event("startup")
-async def startup_event():
+async def startup_event() -> None:
     # Initialize some default agents for the platform
     research_agent = BaseAgent(
         name="ResearchAgent",
@@ -45,7 +46,7 @@ async def startup_event():
     print("Default agents initialized!")
 
 @app.get("/")
-async def root():
+async def root() -> Dict[str, str]:
     return {"message": "Welcome to the Multi AI Agent Platform API. Head to /docs for Swagger UI API references."}
 
 if __name__ == "__main__":

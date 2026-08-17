@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import { type Agent, type Task, type SystemEvent, fetchAgents, fetchTasks, fetchSystemEvents } from './api/client';
-import TaskBoard from './components/TaskBoard';
-import AgentRegistry from './components/AgentRegistry';
-import AgentChat from './components/AgentChat';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import type { Agent, Task, SystemEvent } from './api/client.ts';
+import { fetchAgents, fetchTasks, fetchSystemEvents } from './api/client.ts';
+import TaskBoard from './components/TaskBoard.tsx';
+import AgentRegistry from './components/AgentRegistry.tsx';
+import AgentChat from './components/AgentChat.tsx';
 import { LayoutDashboard, Users, Activity } from 'lucide-react';
 
 function App() {
@@ -10,8 +11,9 @@ function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [events, setEvents] = useState<SystemEvent[]>([]);
   const [activeTab, setActiveTab] = useState<'board' | 'registry' | 'chat'>('board');
+  const isInitialLoad = useRef(true);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const [agentsData, tasksData, eventsData] = await Promise.all([
         fetchAgents(),
@@ -24,13 +26,22 @@ function App() {
     } catch (err) {
       console.error("Error loading data", err);
     }
-  };
+  }, []);
 
+  // Initial load
   useEffect(() => {
-    loadData();
+    if (isInitialLoad.current) {
+      isInitialLoad.current = false;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      loadData();
+    }
+  }, [loadData]);
+
+  // Polling interval
+  useEffect(() => {
     const interval = setInterval(loadData, 5000); // Simple polling for MVP
     return () => clearInterval(interval);
-  }, []);
+  }, [loadData]);
 
   return (
     <div className="app-container">

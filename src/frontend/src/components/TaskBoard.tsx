@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { type Task, type Agent, createTask } from '../api/client';
+import type { Task, Agent } from '../api/client.ts';
+import { createTask } from '../api/client.ts';
 import { PlusCircle, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
 
 interface Props {
@@ -21,7 +22,7 @@ export default function TaskBoard({ tasks, agents, onRefresh }: Props) {
       setNewTaskDesc('');
       setSelectedAgent('');
       onRefresh();
-    } catch (e) {
+    } catch {
       alert("Error creating task");
     } finally {
       setIsSubmitting(false);

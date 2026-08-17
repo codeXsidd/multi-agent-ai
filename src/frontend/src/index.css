@@ -58,15 +58,8 @@ body {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
-  display: grid;
-  grid-template-columns: 1fr 350px;
-  gap: 24px;
-}
-
-@media (max-width: 1024px) {
-  .content-area {
-    grid-template-columns: 1fr;
-  }
+  display: flex;
+  flex-direction: column;
 }
 
 /* Reusable Components */

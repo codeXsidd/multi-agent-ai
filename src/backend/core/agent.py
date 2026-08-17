@@ -1,6 +1,5 @@
 import os
 import uuid
-import json
 from typing import List, Dict, Any, Optional
 from backend.core.memory import SimpleMemory
 from backend.core.communication import broker, Message
@@ -18,7 +17,7 @@ class BaseAgent:
         # Subscribe to broker
         broker.subscribe(self.id, self.handle_message)
 
-    async def handle_message(self, message: Message):
+    async def handle_message(self, message: Message) -> None:
         """Called by the broker when a message is received"""
         self.memory.add_message("user", f"Message from {message.sender_id}: {message.content}")
 
@@ -54,7 +53,7 @@ class BaseAgent:
             self.memory.add_message("assistant", error_msg)
             return error_msg
             
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "id": self.id,
             "name": self.name,
